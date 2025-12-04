@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AutoNova</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .main-header {
+            background: linear-gradient(135deg, #ff6a00 0%, #e65e00 100%);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .main-nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #ff6a00;
+        }
+
+        .login-btn {
+            background: #ff6a00;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #e65e00;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .register-link a {
+            color: #ff6a00;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            display: none;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .demo-account {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .demo-account h4 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+
+        .demo-account p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <a href="welcome.html" class="logo">AUTONOVA</a>
+            <nav class="main-nav">
+                <a href="welcome.html">Acasă</a>
+                <a href="index.html">Mașini</a>
+                <a href="adauga.html">Vinde mașină</a>
+                <a href="login.html" id="loginLink">Contul meu</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Autentificare</h1>
+        <div class="login-form">
+            <div id="message" class="message"></div>
+            
+            <div class="demo-account">
+                <h4>🔐 Cont demo pentru testare:</h4>
+                <p><strong>Email:</strong> admin@autonova.ro</p>
+                <p><strong>Parolă:</strong> parola123</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Parolă</label>
+                    <input type="password" id="password" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Intră în cont</button>
+            </form>
+            
+            <div class="register-link">
+                <a href="register.html">Nu ai cont? Înregistrează-te</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === SISTEM LOGIN ===
+        
+        // Initializează utilizatorii dacă nu există
+        function initializeUsers() {
+            if (!localStorage.getItem('autonova_users')) {
+                const defaultUsers = [
+                    { 
+                        id: 1, 
+                        username: 'admin', 
+                        email: 'admin@autonova.ro', 
+                        password: 'parola123' 
+                    }
+                ];
+                localStorage.setItem('autonova_users', JSON.stringify(defaultUsers));
+                console.log('Utilizatori inițiali creați');
+            }
+        }
+
+        // Login utilizator
+        function loginUser(email, password) {
+            const users = JSON.parse(localStorage.getItem('autonova_users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('autonova_current_user', JSON.stringify(user));
+                return { success: true, user: user };
+            }
+            return { success: false, message: "❌ Email sau parolă incorectă!" };
+        }
+
+        // Verifică dacă utilizatorul este logat
+        function isLoggedIn() {
+            return localStorage.getItem('autonova_current_user') !== null;
+        }
+
+        // Obține utilizatorul curent
+        function getCurrentUser() {
+            return JSON.parse(localStorage.getItem('autonova_current_user'));
+        }
+
+        // Actualizează navigația
+        function updateNavigation() {
+            const loginLink = document.getElementById('loginLink');
+            if (loginLink && isLoggedIn()) {
+                const user = getCurrentUser();
+                loginLink.innerHTML = `Bună, ${user.username} | <a href="logout.html" style="color: white; text-decoration: none;">Logout</a>`;
+            }
+        }
+
+        // === PORNIRE ===
+        initializeUsers();
+        updateNavigation();
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageEl = document.getElementById('message');
+            
+            const result = loginUser(email, password);
+            
+            if (result.success) {
+                showMessage('✅ Te-ai logat cu succes! Redirecționare...', 'success');
+                updateNavigation(); // Actualizează navigația imediat
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                showMessage(result.message, 'error');
+            }
+        });
+
+        // Funcție pentru afișarea mesajelor
+        function showMessage(message, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = message;
+            messageEl.className = 'message ' + type;
+            messageEl.style.display = 'block';
+        }
+
+        // Auto-completează contul demo pentru testare
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('email').value = 'admin@autonova.ro';
+            document.getElementById('password').value = 'parola123';
+        });
+
+        console.log('Pagina de login este gata!');
+    </script>
+</body>
+</html>
